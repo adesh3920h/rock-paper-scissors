@@ -1,0 +1,118 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+   <script src="script.js" defer></script>
+</head>
+<body>
+
+     <h1>Rock Paper Scissors</h1>
+
+    <button class = "choice" id="rock">Rock</button>
+    <button class = "choice" id="paper">Paper</button>
+    <button class = "choice" id="scissors">Scissors</button>
+
+    <button id = "rules">show rules</button>
+    <button id = "reset">restart</button>
+
+    <div id="results">
+        <p>Choose an option to start the game!</p>
+    </div>
+
+  <script>
+     let humanScore = 0;
+  let computerScore = 0;
+
+  const results = document.querySelector("#results");
+
+    function getComputerChoice() {
+  const computerChoices = ["rock", "paper", "scissors"];
+  return computerChoices[Math.floor(Math.random() * computerChoices.length)];
+}
+ 
+  function playRound(humanChoice, computerChoice) {
+
+    if (humanChoice === computerChoice) {
+      return "Draw!";
+    }
+
+    else if (
+      (humanChoice === "rock" && computerChoice === "scissors") ||
+      (humanChoice === "paper" && computerChoice === "rock") ||
+      (humanChoice === "scissors" && computerChoice === "paper")
+    ) {
+      humanScore++;
+      return "You win!";
+    }
+
+    else {
+      computerScore++;
+      return "You lose!";
+    }
+
+  } 
+
+  function playGame(humanChoice) {
+    if(humanScore >= 5 || computerScore >= 5) {
+        return;
+    } 
+
+    const computerChoice = getComputerChoice();
+
+    const roundResult =  playRound(humanChoice, computerChoice);
+
+    results.innerHTML = `
+        <p>${roundResult}</p>
+        <p>Player Score: ${humanScore}</p>
+        <p>Computer Score: ${computerScore}</p>
+    `;
+
+    if (humanScore === 5) {
+        results.innerHTML += `
+            <h2>You Won The Game! 🎉</h2>
+        `;
+    }
+
+    if (computerScore === 5) {
+        results.innerHTML += `
+            <h2>Computer Won The Game! 💀</h2>
+        `;
+    }
+  }
+
+  const button = document.querySelectorAll(".choice");
+
+  button.forEach(button => {
+    button.addEventListener("click", () =>{
+        playGame(button.id);
+    });
+  });
+
+  const rulesBtn = document.querySelector("#rules");
+
+  const resetBtn = document.querySelector("#reset");
+
+  rulesBtn.addEventListener("click", () => alert(`
+Rock beats Scissors
+Scissors beats Paper
+Paper beats Rock
+
+First to 5 points wins.
+    `));
+
+    resetBtn.addEventListener("click", () => {
+
+        humanScore = 0;
+    computerScore = 0;
+    results.innerHTML = `
+        <p>Choose an option to start the game!</p>
+        <p>Player Score: 0</p>
+        <p>Computer Score: 0</p>
+    `;
+    });
+
+  </script>
+</body>
+</html>
